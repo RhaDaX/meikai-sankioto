@@ -1,0 +1,2 @@
+PATH=/usr/local/bin:/usr/local/sbin:~/bin:/usr/bin:/bin:/usr/sbin:/sbin
+*/1 * * * * /opt/homebrew/bin/php /Users/nicolas_candelon/Documents/Projects/EPP/meikai-sankioto/watcher.php

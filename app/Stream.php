@@ -191,9 +191,12 @@ public function cronjob_exists($command){
         if(is_string($command)&&!empty($command)&& $this->cronjob_exists($command)===FALSE){
 
             //add job to crontab
-            exec('echo -e "`crontab su nicolascandelon -l`\n'.$command.'" | crontab -', $output);
+            //exec('crontab -u nicolas_candelon -l '.$command.' | crontab -', $output);
+            //exec('echo -e "`crontab su nicolascandelon -l`\n'.$command.'" | crontab -', $output);
+            //var_dump('crontab -l '.$command.' | crontab -');
 
-var_dump('echo -e "`crontab su nicolascandelon -l`\n'.$command.'" | crontab -', $output);
+            //file_put_contents( 'cronList.txt', '56 * * * * /usr/local/bin/php -q /Users/nicolas_candelon/Documents/Projects/EPP/meikai-sankioto/watcher.php' );
+            exec( 'crontab cronList.txt' , $output);
         }
 
        return $output;
