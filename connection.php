@@ -20,6 +20,7 @@ function fullread($fp, $count) {
         $count -= strlen($data);
         $buffer .= $data;
     }
+    var_dump($buffer);
     return $buffer;
 }
 
@@ -27,6 +28,7 @@ function fullread($fp, $count) {
 
 function receive($fp) {
     $data = fullread($fp, 4);
+    //var_dump($data);
     $count = unpack('N', $data);
     $count = $count[1];
     $buffer = fullread($fp, $count - 4);
@@ -38,7 +40,7 @@ if (! $fp) {
     exit("ERROR: $errno - $errstr<br />\n");
 }
 $frame = receive($fp);
-printf("RECEIVED:\n%s\n", $frame);
+//printf("RECEIVED:\n%s\n", $frame);
 $xlogin = htmlspecialchars($login, ENT_XML1);
 $xpw = htmlspecialchars($password, ENT_XML1);
 $buffer = "<?xml version='1.0' encoding='UTF-8'?><epp xmlns='urn:ietf:params:xml:ns:epp-1.0' >
@@ -113,19 +115,19 @@ $buffer4 = '<?xml version="1.0"?>
 </epp>';
 fwrite($fp, pack('N', 4 + strlen($buffer)));
 fwrite($fp, $buffer);
-printf("SENT:\n%s\n", $buffer);
+//printf("SENT:\n%s\n", $buffer);
 $frame = receive($fp);
-printf("RECEIVED first:\n%s\n", $frame);
+//printf("RECEIVED first:\n%s\n", $frame);
 
 //$whois = shell_exec("whois linkweb.fr");
 //echo '<pre>';
 //print_r($whois);
 
-echo 'Finish';
-// fwrite($fp, pack('N', 4 + strlen($buffer4)));
-// fwrite($fp, $buffer4);
-// $frame = receive($fp);
-// printf("RECEIVED second:\n%s\n", $frame);
+//echo 'Finish';
+    fwrite($fp, pack('N', 4 + strlen($buffer2)));
+    fwrite($fp, $buffer2);
+    $frame = receive($fp);
+    //printf("RECEIVED second:\n%s\n", $frame);
 
 fclose($fp);
 //NC32276-FRNIC contact technique de test
