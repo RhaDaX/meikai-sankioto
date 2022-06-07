@@ -117,6 +117,7 @@ class Stream
     }
 
     public function get_string_between($string, $start, $end){
+        //var_dump(json_decode($string));
         $string = ' ' . $string;
         $ini = strpos($string, $start);
         if ($ini == 0) return '';
@@ -143,13 +144,13 @@ class Stream
     public function checkdomain($domain){
         $buffer3 =  "<?xml version='1.0' encoding='UTF-8'?><epp xmlns='urn:ietf:params:xml:ns:epp-1.0' >
            <command>
- <check>
-<domain:check xmlns:domain='urn:ietf:params:xml:ns:domain-1.0'>
-<domain:name>$domain</domain:name>
-</domain:check>
- </check>
- <clTRID>dsfdkvbdsgcbdgsc</clTRID>
- </command>
+             <check>
+            <domain:check xmlns:domain='urn:ietf:params:xml:ns:domain-1.0'>
+            <domain:name>$domain</domain:name>
+            </domain:check>
+             </check>
+             <clTRID>dsfdkvbdsgcbdgsc</clTRID>
+             </command>
             </epp>";
         fwrite($this->fp, pack('N', 4 + strlen($buffer3)));
         //printf("SENT\n%s\n:\n%s\n",$this->name , $buffer);
@@ -160,31 +161,30 @@ class Stream
         
         $parsed = $this->get_string_between($frame, 'avail="', '">');
 
-//echo $parsed; // (result = dog)
-        var_dump($parsed);
+        //echo $parsed; // (result = dog)
         return $parsed;
     }
 
-public function cronjob_exists($command){
+    public function cronjob_exists($command){
 
-    $cronjob_exists=false;
+        $cronjob_exists=false;
 
-    exec('crontab -l', $crontab);
+        exec('crontab -l', $crontab);
 
 
-    if(isset($crontab)&&is_array($crontab)){
+        if(isset($crontab)&&is_array($crontab)){
 
-        $crontab = array_flip($crontab);
+            $crontab = array_flip($crontab);
 
-        if(isset($crontab[$command])){
+            if(isset($crontab[$command])){
 
-            $cronjob_exists=true;
+                $cronjob_exists=true;
+
+            }
 
         }
-
+        return $cronjob_exists;
     }
-    return $cronjob_exists;
-}
 
     public function append_cronjob($command){
 
@@ -200,5 +200,26 @@ public function cronjob_exists($command){
         }
 
        return $output;
+    }
+
+    public function checkIfItsTime(){
+        $filename = "domain.json";
+        $domains = file_get_contents($filename);
+        $minute = (new \DateTime)->format('i');
+
+        // check today date and add 2h for offset
+        $today = strtotime("+2 hours", strtotime(date("d/m/Y H:i")));
+        $today = date('d/m/Y H:i',$today);
+        foreach (json_decode($domains, true) as $domain){
+            //check each domain and launch connexion
+            $connexionTime = $domain['launchTime'].' '. date('H:i', strtotime($domain['launchTime']));
+            $connexionTime = strtotime("+1 hour -15 minutes", strtotime($connexionTime));
+            $day = date('d/m/Y H:i', $connexionTime);
+            //var_dump('NDD' . $day);
+            //var_dump($today);
+            if($today == $day){
+                echo 'Galaxian Explosion !!!';
+            }
+        }
     }
 }

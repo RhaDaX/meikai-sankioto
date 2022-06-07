@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4421526e6340b1981b7ddfcc5e0ab55",
+    "content-hash": "bb99d6ac37bb8808c4001cf532d22642",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -388,6 +388,53 @@
             "time": "2022-03-04T08:16:47+00:00"
         },
         {
+            "name": "tiben/crontab-manager",
+            "version": "v1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TiBeN/CrontabManager.git",
+                "reference": "9eba6bde831ab715eb6df5d97897df12c6bd6d8a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TiBeN/CrontabManager/zipball/9eba6bde831ab715eb6df5d97897df12c6bd6d8a",
+                "reference": "9eba6bde831ab715eb6df5d97897df12c6bd6d8a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36|^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TiBeN\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Legendre",
+                    "email": "legendre.benjamin@gmail.com"
+                }
+            ],
+            "description": "A library for managing linux cron jobs.",
+            "keywords": [
+                "crontab",
+                "scheduling"
+            ],
+            "support": {
+                "issues": "https://github.com/TiBeN/CrontabManager/issues",
+                "source": "https://github.com/TiBeN/CrontabManager/tree/v1.3.1"
+            },
+            "time": "2021-11-12T08:52:06+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.4.1",
             "source": {
@@ -476,5 +523,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }
