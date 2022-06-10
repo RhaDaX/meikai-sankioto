@@ -207,23 +207,21 @@ class Stream
         $domains = file_get_contents($filename);
         $minute = (new \DateTime)->format('i');
 
-
-        $today = strtotime("+2 hours", strtotime(date("d/m/Y H:i")));
-        $today = date('d/m/Y H:i',$today);
+        $today =  \DateTime::createFromFormat('d/m/Y H:i', date("d/m/Y H:i"));
+        $today->setTimezone(new \DateTimeZone('Europe/Paris'));
+        //$today = strtotime("+2 hours", strtotime(date("d/m/Y H:i")));
+        //$today = date('d/m/Y H:i',$today);
         foreach (json_decode($domains, true) as $domain){
+
             $key = array_keys($domain);
-            $connexionTime = date("d/m/Y", strtotime($domain[$key[0]]['expiryDate'])).' '. date('H:i', strtotime($domain[$key[0]]['expiryTime']));
-            //echo $domain[$key[0]]['expiryDate'];
-            $test = (new \DateTime);
-            $test::createFromFormat('d/m/Y', $domain[$key[0]]['expiryTime'] );
-            echo $test->format('d/m/Y');
-            $connexionTime = strtotime("+1 hour -15 minutes", strtotime($connexionTime));
-            $day = date('d/m/Y H:i', $connexionTime);
+            $completeTime = $domain[$key[0]]['expiryDate'] .' '. $domain[$key[0]]['launchTime'];
+            $connexionTime =  \DateTime::createFromFormat('d/m/Y H:i', $completeTime);
+            //$connexionTime->modify("45 minutes");
             echo '<pre>';
-            //var_dump($key[0]);
-            //var_dump('NDD' . $day);
-            //var_dump($today);
-            if($today == $day){
+            var_dump($key[0]);
+            var_dump($connexionTime->format('d/m/Y H:i'));
+            var_dump($today->format('d/m/Y H:i'));
+            if($today->format('d/m/Y H:i') == $connexionTime->format('d/m/Y H:i')){
                 echo 'Galaxian Explosion !!!';
             } else {
                 echo 'Its not time';
