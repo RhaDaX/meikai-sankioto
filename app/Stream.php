@@ -207,19 +207,29 @@ class Stream
         $domains = file_get_contents($filename);
         $minute = (new \DateTime)->format('i');
 
-        // check today date and add 2h for offset
+
         $today = strtotime("+2 hours", strtotime(date("d/m/Y H:i")));
         $today = date('d/m/Y H:i',$today);
         foreach (json_decode($domains, true) as $domain){
-            //check each domain and launch connexion
-            $connexionTime = $domain['launchTime'].' '. date('H:i', strtotime($domain['launchTime']));
+            $key = array_keys($domain);
+            $connexionTime = date("d/m/Y", strtotime($domain[$key[0]]['expiryDate'])).' '. date('H:i', strtotime($domain[$key[0]]['expiryTime']));
+            //echo $domain[$key[0]]['expiryDate'];
+            $test = (new \DateTime);
+            $test::createFromFormat('d/m/Y', $domain[$key[0]]['expiryTime'] );
+            echo $test->format('d/m/Y');
             $connexionTime = strtotime("+1 hour -15 minutes", strtotime($connexionTime));
             $day = date('d/m/Y H:i', $connexionTime);
+            echo '<pre>';
+            //var_dump($key[0]);
             //var_dump('NDD' . $day);
             //var_dump($today);
             if($today == $day){
                 echo 'Galaxian Explosion !!!';
+            } else {
+                echo 'Its not time';
             }
+
+
         }
     }
 }
