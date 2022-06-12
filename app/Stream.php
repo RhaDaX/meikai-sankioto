@@ -1,7 +1,7 @@
 <?php 
 namespace App;
 //require __DIR__ . '/vendor/autoload.php';
-//$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+//$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
 
 
 
@@ -215,19 +215,33 @@ class Stream
 
             $key = array_keys($domain);
             $completeTime = $domain[$key[0]]['expiryDate'] .' '. $domain[$key[0]]['launchTime'];
+            var_dump($completeTime);
             $connexionTime =  \DateTime::createFromFormat('d/m/Y H:i', $completeTime);
             //$connexionTime->modify("45 minutes");
             echo '<pre>';
-            var_dump($key[0]);
-            var_dump($connexionTime->format('d/m/Y H:i'));
-            var_dump($today->format('d/m/Y H:i'));
+            //var_dump($key[0]);
+            //var_dump($connexionTime->format('d/m/Y H:i'));
+            //var_dump($today->format('d/m/Y H:i'));
             if($today->format('d/m/Y H:i') == $connexionTime->format('d/m/Y H:i')){
                 echo 'Galaxian Explosion !!!';
+                //$this->galacticaIllusion();
+                return $today->modify("20 minutes");;
             } else {
                 echo 'Its not time';
+                return false;
             }
 
 
         }
+    }
+
+
+    /*
+     * Launch two connexion to check domain availability
+     */
+    public function galacticaIllusion($eaques, $rhadamanthe){
+
+
+        var_dump('test');
     }
 }

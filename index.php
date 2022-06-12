@@ -8,9 +8,12 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 
 
 $minos = new Stream($dotenv, 'Minos');
-//$eaques = new Stream($dotenv, 'Eaques');
+$eaques = new Stream($dotenv, 'Eaques');
+$rhadamanthe = new Stream($dotenv, 'Rhadamanthe');
 
-//$minos->createConnexions();
+$minos->createConnexions();
+$rhadamanthe->createConnexions();
+$eaques->createConnexions();
 //sleep(1);
 //$eaques->createConnexions();
 // $minosAvail = $minos->checkdomain('linkweb.fr');
@@ -37,40 +40,6 @@ $domain = array();
  * linkweb.Fr
  */
 
-/*
- * Vielle Version
-$strJsonFileContents = file_get_contents("domain.json");
-// Convert to array
-if($strJsonFileContents == NULL){
-
-    $domain[0]['name'] = $domainTocheck;
-    $domain[0]['expiryDate'] = date("d/m/Y", strtotime($expireDate));
-    $domain[0]['expiryTime'] = date("H:i:s", strtotime($expireDate));
-    $minute = date('i', strtotime($expireDate));
-    if($minute > '32') {
-        $domain[0]['launchTime'] = date("H:i", strtotime("+1 hour", strtotime($expireDate)));
-    } else {
-        $domain[0]['launchTime'] = date("H:i", strtotime($expireDate));
-    }
-    $jsonData = json_encode($domain);
-    file_put_contents('domain.json', $jsonData);
-} else {
-
-    $domain['name'] = $domainTocheck;
-    $domain['expiryDate'] = date("d/m/Y", strtotime($expireDate));
-    $domain['expiryTime'] = date("H:i:s", strtotime($expireDate));
-    $minute = date('i', strtotime($expireDate));
-    if($minute > '32') {
-        $domain['launchTime'] = date("H", strtotime("+1 hour", strtotime($expireDate))) . ':22';
-    } else {
-        $domain['launchTime'] = date("H:i", strtotime($expireDate));
-    }
-    $array = json_decode($strJsonFileContents, true);
-    array_push($array, $domain);
-    var_dump($array);
-    $jsonData = json_encode($array);
-    file_put_contents('domain.json', $jsonData);
-} */
 
 /* Version fonctionnelle
 
@@ -115,4 +84,37 @@ if($count === 0){
 
 
 
-$minos->checkIfItsTime();
+$scanTime = $minos->checkIfItsTime();
+
+var_dump($scanTime);
+if($scanTime != false){
+    $today =  \DateTime::createFromFormat('d/m/Y H:i', date("d/m/Y H:i"));
+    $today->setTimezone(new \DateTimeZone('Europe/Paris'));
+    $altar = 'rhada';
+    while($today <= $scanTime){
+
+        if($altar === 'rhada'){
+            usleep(210000);
+            $rhadaResult = $rhadamanthe->checkdomain($domainTocheck);
+            echo  PHP_EOL ;
+            echo 'Rhadamanthe';
+            var_dump(\DateTime::createFromFormat('U.u', microtime(true)));
+            $altar = 'eaques';
+        } elseif($altar === 'eaques') {
+            usleep(210000);
+            $eaquesResult = $eaques->checkdomain($domainTocheck);
+            echo  PHP_EOL ;
+            echo 'Eaques';
+            var_dump( \DateTime::createFromFormat('U.u', microtime(true)));
+            $altar = 'minos';
+        }else {
+            usleep(210000);
+            $eaquesResult = $minos->checkdomain($domainTocheck);
+            echo  PHP_EOL ;
+            echo 'Minos';
+            var_dump( \DateTime::createFromFormat('U.u', microtime(true)));
+            $altar = 'rhada';
+        }
+    }
+
+}
