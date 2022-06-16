@@ -24,7 +24,7 @@ $eaques->createConnexions();
 
 // }
 //$eaques->checkdomain('afnic.fr');
-$domainTocheck = 'opca3plus.fr';
+$domainTocheck = 'chr-reunion.fr';
 $expire = $minos->whoisDomain($domainTocheck);
 
 $expireDate = $minos->get_string_between($expire,"Expiry Date:", "created:");
@@ -42,8 +42,8 @@ $domain = array();
 
 
 /* Version fonctionnelle
-
-$strJsonFileContents = file_get_contents("domain.json");
+*/
+/*$strJsonFileContents = file_get_contents("domain.json");
 $array = json_decode($strJsonFileContents, true);
 $count = ($array) ? count($array) : 0;
 $i = $count + 1;
@@ -71,15 +71,15 @@ if($count === 0){
     if($minute > '32') {
         $domain[$i][$domainTocheck]['launchTime'] = date("H", strtotime("+1 hour", strtotime($expireDate))) . ':22';
     } else {
-        $domain[$i][$domainTocheck]['launchTime'] = date("H:i", strtotime($expireDate));
+        $domain[$i][$domainTocheck]['launchTime'] = date("H", strtotime($expireDate)). ':22';
     }
 
     array_push($array, $domain[$i]);
    // var_dump($array);
     $jsonData = json_encode($array);
     file_put_contents('domain.json', $jsonData);
-}*/
-
+}
+*/
 //$minos->append_cronjob(date("s", strtotime($expireDate)) .' '. date("i", strtotime($expireDate))  .' '. date("h", strtotime($expireDate))  .' * * curl -s index.php');
 
 
@@ -91,29 +91,65 @@ if($scanTime != false){
     $today =  \DateTime::createFromFormat('d/m/Y H:i', date("d/m/Y H:i"));
     $today->setTimezone(new \DateTimeZone('Europe/Paris'));
     $altar = 'rhada';
-    while($today <= $scanTime){
+    $exit = false;
+    /*while($today <= $scanTime && $exit === false){
 
         if($altar === 'rhada'){
             usleep(210000);
             $rhadaResult = $rhadamanthe->checkdomain($domainTocheck);
             echo  PHP_EOL ;
-            echo 'Rhadamanthe';
+            echo 'Rhadamanthe :' . $rhadaResult;
             var_dump(\DateTime::createFromFormat('U.u', microtime(true)));
             $altar = 'eaques';
+            $exit = $rhadaResult;
         } elseif($altar === 'eaques') {
             usleep(210000);
             $eaquesResult = $eaques->checkdomain($domainTocheck);
             echo  PHP_EOL ;
-            echo 'Eaques';
+            echo 'Eaques :' . $eaquesResult;
             var_dump( \DateTime::createFromFormat('U.u', microtime(true)));
             $altar = 'minos';
-        }else {
+        } else {
             usleep(210000);
-            $eaquesResult = $minos->checkdomain($domainTocheck);
+            $minosResult = $minos->checkdomain($domainTocheck);
             echo  PHP_EOL ;
-            echo 'Minos';
+            echo 'Minos :' . $minosResult;
             var_dump( \DateTime::createFromFormat('U.u', microtime(true)));
             $altar = 'rhada';
+        }
+    }*/
+    /**
+     * Version de test Simulation de libération d'un domaine
+     */
+    while($today <= $scanTime && $exit === false){
+
+        if($altar === 'rhada'){
+            usleep(640000);
+            $rhadaResult = $rhadamanthe->simulateCheckDomain();
+            echo  PHP_EOL ;
+            echo 'Rhadamanthe :' . $rhadaResult;
+            var_dump(\DateTime::createFromFormat('U.u', microtime(true)));
+            $altar = 'eaques';
+            $exit = $rhadaResult;
+            if($rhadaResult === true){
+                echo 'Eaques snipe le domaine';
+                $eaques->snipeDomain();
+            }
+        } elseif($altar === 'eaques') {
+            usleep(640000);
+            $eaquesResult = $eaques->simulateCheckDomain();
+            echo 'Eaques :' . $eaquesResult;
+            var_dump( \DateTime::createFromFormat('U.u', microtime(true)));
+            $altar = 'minos';
+            $exit = $rhadaResult;
+        } else {
+            usleep(640000);
+            $minosResult = $minos->simulateCheckDomain();
+            echo  PHP_EOL ;
+            echo 'Minos :' . $minosResult;
+            var_dump( \DateTime::createFromFormat('U.u', microtime(true)));
+            $altar = 'rhada';
+            $exit = $rhadaResult;
         }
     }
 

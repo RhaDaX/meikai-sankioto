@@ -165,6 +165,43 @@ class Stream
         return $parsed;
     }
 
+    public function simulateCheckDomain(){
+        $today =  \DateTime::createFromFormat('i', date("i"));
+        $today->setTimezone(new \DateTimeZone('Europe/Paris'));
+        if($today->format('i') == 49 ){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function snipeDomain(){
+        $buffer = '<?xml version="1.0"?>
+            <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+             <command>
+             <create>
+            <domain:create xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+            <domain:name>linkweb.fr</domain:name>
+            <domain:period unit="y">1</domain:period>
+            <domain:registrant>MP61713</domain:registrant>
+            <domain:contact type="admin">MP61713</domain:contact>
+            <domain:contact type="tech">NC32276</domain:contact>
+            <domain:authInfo>
+            <domain:pw>iv2252UtF8N/kF7atGH3iCaf</domain:pw>
+            </domain:authInfo>
+            </domain:create>
+             </create>
+             <clTRID>TMcF3I+zGO1VS5gO7pJWDkVn</clTRID>
+             </command>
+            </epp>';
+        fwrite($this->fp, pack('N', 4 + strlen($buffer)));
+        //printf("SENT\n%s\n:\n%s\n",$this->name , $buffer);
+        fwrite($this->fp, $buffer);
+        $frame = $this->receive($this->fp);
+        var_dump($frame);
+        return $frame;
+    }
+
     public function cronjob_exists($command){
 
         $cronjob_exists=false;
@@ -225,7 +262,7 @@ class Stream
             if($today->format('d/m/Y H:i') == $connexionTime->format('d/m/Y H:i')){
                 echo 'Galaxian Explosion !!!';
                 //$this->galacticaIllusion();
-                return $today->modify("20 minutes");;
+                return $today->modify("20 minutes");
             } else {
                 echo 'Its not time';
                 return false;
