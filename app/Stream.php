@@ -128,7 +128,6 @@ class Stream
 
     public function whoisDomain( $domain){
         $whois = shell_exec("whois $domain");
-        echo '<pre>';
         return $whois;
     }
 
@@ -168,7 +167,7 @@ class Stream
     public function simulateCheckDomain(){
         $today =  \DateTime::createFromFormat('i', date("i"));
         $today->setTimezone(new \DateTimeZone('Europe/Paris'));
-        if($today->format('i') == 49 ){
+        if($today->format('i') == 53){
             return true;
         } else {
             return false;
