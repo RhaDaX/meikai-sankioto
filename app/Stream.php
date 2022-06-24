@@ -167,7 +167,7 @@ class Stream
     public function simulateCheckDomain(){
         $today =  \DateTime::createFromFormat('i', date("i"));
         $today->setTimezone(new \DateTimeZone('Europe/Paris'));
-        if($today->format('i') == 53){
+        if($today->format('i') == 14){
             return true;
         } else {
             return false;
@@ -197,7 +197,7 @@ class Stream
         //printf("SENT\n%s\n:\n%s\n",$this->name , $buffer);
         fwrite($this->fp, $buffer);
         $frame = $this->receive($this->fp);
-        var_dump($frame);
+        file_put_contents('cronTest.txt', json_encode($frame));
         return $frame;
     }
 
@@ -259,7 +259,7 @@ class Stream
             //var_dump($connexionTime->format('d/m/Y H:i'));
             //var_dump($today->format('d/m/Y H:i'));
             if($today->format('d/m/Y H:i') == $connexionTime->format('d/m/Y H:i')){
-                echo 'Galaxian Explosion !!!';
+                //echo 'Galaxian Explosion !!!';
                 //$this->galacticaIllusion();
                 return $today->modify("20 minutes");
             } else {
